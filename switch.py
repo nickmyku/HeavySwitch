@@ -7,9 +7,6 @@ from time import sleep
 from phue import Bridge
 from subprocess import call
 
-b = Bridge('192.168.1.11')
-lights = b.get_light_objects('id')
-
 hold_time = .6   #amount of time in seconds which must pass for a button to register a hold
 
 #pin definitions
@@ -20,7 +17,6 @@ ON_LED = 27
 DIM_LED = 22
 COLOR_LED = 17
 
-#350
 #on light parameters
 on_Hue = 35000		#hue value, from 0 to 65280
 on_Sat = 255		#saturation value, from 0 to 255, higher the more colorful
@@ -50,10 +46,14 @@ GPIO.setup(ON_LED, GPIO.OUT)
 GPIO.setup(DIM_LED, GPIO.OUT)
 GPIO.setup(COLOR_LED, GPIO.OUT)
 
-#set all status indicators to on
+#set all first LED to on - indicates script ran
 GPIO.output(ON_LED, True)
+
+b = Bridge('192.168.1.11')
+lights = b.get_light_objects('id')
+
+#set second LED to on - indicates bridge connection was set up
 GPIO.output(COLOR_LED, True)
-GPIO.output(DIM_LED, True)
 
 def setLight(light_num, on_val, hue_val, sat_val, bright_val):
     lights[light_num].on = on_val
@@ -108,6 +108,9 @@ def buttonHeld(pin):
 
 
 print("\npress Ctrl+C or press all buttons to terminate script")
+
+#set third LED to on - indicates main loop was reached
+GPIO.output(DIM_LED, True)
 
 while True:
     try:
