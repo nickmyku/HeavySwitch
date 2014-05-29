@@ -13,9 +13,12 @@ lights = b.get_light_objects('id')
 hold_time = .6   #amount of time in seconds which must pass for a button to register a hold
 
 #pin definitions
-ON_PIN = 23
-COLOR_PIN = 24
+ON_PIN = 24
+COLOR_PIN = 23
 DIM_PIN = 25
+ON_LED = 27
+DIM_LED = 22
+COLOR_LED = 17
 
 #350
 #on light parameters
@@ -43,6 +46,14 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(ON_PIN, GPIO.IN)     #full om input pin
 GPIO.setup(COLOR_PIN, GPIO.IN)     #color on input pin
 GPIO.setup(DIM_PIN, GPIO.IN)     #dim on input pin
+GPIO.setup(ON_LED, GPIO.OUT)
+GPIO.setup(DIM_LED, GPIO.OUT)
+GPIO.setup(COLOR_LED, GPIO.OUT)
+
+#set all status indicators to on
+GPIO.output(ON_LED, True)
+GPIO.output(COLOR_LED, True)
+GPIO.output(DIM_LED, True)
 
 def setLight(light_num, on_val, hue_val, sat_val, bright_val):
     lights[light_num].on = on_val
@@ -89,7 +100,8 @@ print("\npress Ctrl+C to terminate script")
 
 while True:
     try:
-        if(GPIO.input(ON_PIN) == False and buttonHeld(ON_PIN) == False):
+        
+	if(GPIO.input(ON_PIN) == False and buttonHeld(ON_PIN) == False):
             setAll(True, on_Hue, on_Sat, on_Bri)
         
         if(GPIO.input(COLOR_PIN) == False and buttonHeld(COLOR_PIN) == False):
