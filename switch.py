@@ -83,7 +83,7 @@ def buttonHeld(pin):
     if(pin == ON_PIN):
 	alt_pin_1 = COLOR_PIN
 	alt_pin_2 = DIM_PIN
-    else if(pin == COLOR_PIN):
+    elif(pin == COLOR_PIN):
 	alt_pin_1 = ON_PIN
 	alt_pin_2 = DIM_PIN
     else:
