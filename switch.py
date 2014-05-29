@@ -78,16 +78,27 @@ def setAll(on_val, hue_val, sat_val, bright_val):
 def buttonHeld(pin):
     start_time = time.time()
     curr_time = time.time()
+    
+    #set the pin numbers of the other buttons based on the pin that was fed into the function
+    if(pin == ON_PIN):
+	alt_pin_1 = COLOR_PIN
+	alt_pin_2 = DIM_PIN
+    else if(pin == COLOR_PIN):
+	alt_pin_1 = ON_PIN
+	alt_pin_2 = DIM_PIN
+    else:
+	alt_pin_1 = ON_PIN
+	alt_pin_2 = COLOR_PIN
 
     #loop continues while time elapsed is less than the hold time threashold
-    #and the button is still being held
-    while((curr_time-start_time < hold_time) and GPIO.input(pin) == False):
+    #and the button is still being held AND no other buttons are pressed
+    while((curr_time-start_time < hold_time) and GPIO.input(pin) == False and GPIO.input(alt_pin_1) == True and GPIO.input(alt_pin_2) == True):
         sleep(0.05);
         curr_time = time.time()
 
-    #if pin is still held after loop exits button hold detected
+    #if pin is still held after loop exits button hold detected AND no other buttons are pressed
     #turn off all lights and return true
-    if(GPIO.input(pin) == False):
+    if(GPIO.input(pin) == False and GPIO.input(alt_pin_1) == True and GPIO.input(alt_pin_2) == True):
         allOff()
         sleep(2)
         return True;
