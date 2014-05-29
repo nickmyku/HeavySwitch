@@ -96,25 +96,29 @@ def buttonHeld(pin):
         return False;
 
 
-print("\npress Ctrl+C to terminate script")
+print("\npress Ctrl+C or press all buttons to terminate script")
 
 while True:
     try:
-        
-	if(GPIO.input(ON_PIN) == False and buttonHeld(ON_PIN) == False):
+        #if "ON" button pressed but not held and no other buttons were pressed - then set lights to "ON" profile
+	if(GPIO.input(ON_PIN) == False and buttonHeld(ON_PIN) == False and GPIO.input(COLOR_PIN) == True and GPIO.input(DIM_PIN) == True):
             setAll(True, on_Hue, on_Sat, on_Bri)
-        
-        if(GPIO.input(COLOR_PIN) == False and buttonHeld(COLOR_PIN) == False):
+        #if "COLOR" button pressed but not held and no other buttons were pressed - then set lights to "COLOR" profile
+        if(GPIO.input(COLOR_PIN) == False and buttonHeld(COLOR_PIN) == False and GPIO.input(ON_PIN) == True and GPIO.input(DIM_PIN) == True):
             setLight(1,True, color_Hue_1, color_Sat_1, color_Bri_1)
 	    setLight(2,True, color_Hue_2, color_Sat_2, color_Bri_2)
 	    setLight(3,True, color_Hue_3, color_Sat_3, color_Bri_3)
-        
-        if(GPIO.input(DIM_PIN) == False and buttonHeld(DIM_PIN) == False):
+        #if "DIM" button pressed but not held and no other buttons were presed -  then set lights to "DIM" profile
+        if(GPIO.input(DIM_PIN) == False and buttonHeld(DIM_PIN) == False and GPIO.input(ON_PIN) == True and GPIO.input(COLOR_PIN) == True):
             setAll(True, dim_Hue, dim_Sat, dim_Bri)
-        sleep(.1);
+        if(GPIO.input(ON_PIN) == False and GPIO.input(COLOR_PIN) == False and GPIO.input(DIM_PIN) == False):
+		break
+	sleep(.1);
     except KeyboardInterrupt:
 	break
     
-
+GPIO.output(ON_LED, False)
+GPIO.output(COLOR_LED, False)
+GPIO.output(DIM_LED, False)
 
 
