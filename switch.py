@@ -17,6 +17,11 @@ ON_LED = 27
 DIM_LED = 22
 COLOR_LED = 17
 
+#switch status booleans
+on_state = false
+color_state = false
+dim_state = false
+
 #on light parameters
 on_Hue = 35000		#hue value, from 0 to 65280
 on_Sat = 255		#saturation value, from 0 to 255, higher the more colorful
@@ -67,6 +72,9 @@ def allOff():
     lights[1].on = False
     lights[2].on = False
     lights[3].on = False
+    on_state = False
+    color_state = False
+    dim_state = False
     return;
 
 def setAll(on_val, hue_val, sat_val, bright_val):
@@ -116,15 +124,39 @@ while True:
     try:
         #if "ON" button pressed but not held and no other buttons were pressed - then set lights to "ON" profile
 	if(GPIO.input(ON_PIN) == False and buttonHeld(ON_PIN) == False and GPIO.input(COLOR_PIN) == True and GPIO.input(DIM_PIN) == True):
-            setAll(True, on_Hue, on_Sat, on_Bri)
+           #if this light combo is not already on then turn it on
+           if(on_state == False):       
+               setAll(True, on_Hue, on_Sat, on_Bri)
+	       on_state = True
+	       color_state = False
+               dim_state = False
+           #otherwise turn everything off
+           else:
+               allOff()
         #if "COLOR" button pressed but not held and no other buttons were pressed - then set lights to "COLOR" profile
         if(GPIO.input(COLOR_PIN) == False and buttonHeld(COLOR_PIN) == False and GPIO.input(ON_PIN) == True and GPIO.input(DIM_PIN) == True):
-            setLight(1,True, color_Hue_1, color_Sat_1, color_Bri_1)
-	    setLight(2,True, color_Hue_2, color_Sat_2, color_Bri_2)
-	    setLight(3,True, color_Hue_3, color_Sat_3, color_Bri_3)
+           #if this light combo is not already on then turn it on
+           if(color_state == False):
+               setLight(1,True, color_Hue_1, color_Sat_1, color_Bri_1)
+	       setLight(2,True, color_Hue_2, color_Sat_2, color_Bri_2)
+	       setLight(3,True, color_Hue_3, color_Sat_3, color_Bri_3)
+               on_state = False
+               color_state = True
+               dim_state = False
+           #otherwise turn everything off
+           else:
+               allOff()
         #if "DIM" button pressed but not held and no other buttons were presed -  then set lights to "DIM" profile
         if(GPIO.input(DIM_PIN) == False and buttonHeld(DIM_PIN) == False and GPIO.input(ON_PIN) == True and GPIO.input(COLOR_PIN) == True):
-            setAll(True, dim_Hue, dim_Sat, dim_Bri)
+            #if this light combo is not already on then turn it on
+            if(dim_state == False):
+               setAll(True, dim_Hue, dim_Sat, dim_Bri)
+	       on_state = False
+               color_state = False
+               dim_state = True
+            #otherwise turn everything off
+            else:
+               allOff()
         if(GPIO.input(ON_PIN) == False and GPIO.input(COLOR_PIN) == False and GPIO.input(DIM_PIN) == False):
 		break
 	sleep(.1);
