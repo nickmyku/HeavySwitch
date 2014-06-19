@@ -26,8 +26,8 @@ each switch has a LED to illuminate it, these LEDs are used to locate the lights
 
 ###Button Functions
 
-| BUTTON | INTERACTION | RESULT |
-| :----: | :---------: | :----- |
+|  BUTTON  |   INTERACTION   | RESULT |
+| :------: | :-------------: | :----- |
 | First Button | First Short  Press | All 3 lights are turned on to full intensity cool white |
 | First Button | Second Short Press | if lights are still on and in the full intensty cool white state pressing the button again will turn them off
 | First Button | Long Press | Turn off any lights that are currently on |
