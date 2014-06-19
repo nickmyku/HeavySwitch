@@ -18,9 +18,9 @@ DIM_LED = 22
 COLOR_LED = 17
 
 #switch status booleans
-on_state = false
-color_state = false
-dim_state = false
+on_state = False
+color_state = False
+dim_state = False
 
 #on light parameters
 on_Hue = 35000		#hue value, from 0 to 65280
@@ -69,6 +69,10 @@ def setLight(light_num, on_val, hue_val, sat_val, bright_val):
 
 
 def allOff():
+    #define varibles as global to prevent useless local varibles from being created
+    global on_state
+    global color_state
+    global dim_state
     lights[1].on = False
     lights[2].on = False
     lights[3].on = False
