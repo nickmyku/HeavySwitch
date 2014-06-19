@@ -19,22 +19,22 @@ each switch has a LED to illuminate it, these LEDs are used to locate the lights
 
 | LED STATE | EXPLAINATION |
 | :---------: | :------------ |
-| ALL LEDS OFF | script failed to start or exited safely |
-| FIRST LED ON | script started, defined global varibles, and set IO pin states |
-| SECOND LED ON | connection to hue bridge has been established |
-| THIRD LED ON | the script made it to the main loop (but the main loop is not necessarily running still) |
+| ALL LEDS OFF | Script failed to start or exited safely |
+| FIRST LED ON | Script started, defined global varibles, and set IO pin states |
+| SECOND LED ON | Connection to hue bridge has been established |
+| THIRD LED ON | The script made it to the main loop (but the main loop is not necessarily running still) |
 
 ###Button Functions
 
 |  BUTTON  |   INTERACTION   | RESULT |
 | :------: | :-------------: | :----- |
 | First Button | First Short  Press | All 3 lights are turned on to full intensity cool white |
-| First Button | Second Short Press | if lights are still on and in the full intensty cool white state pressing the button again will turn them off
+| First Button | Second Short Press | If lights are still on and in the full intensty cool white state pressing the button again will turn them off
 | First Button | Long Press | Turn off any lights that are currently on |
 | Second Button | First Short  Press | All 3 lights are turned on to a medium intensity pink or cyan |
-| Second Button | Second Short Press | if lights are still on and in the medium intensity pink or cyan state pressing the button again will turn them off
+| Second Button | Second Short Press | If lights are still on and in the medium intensity pink or cyan state pressing the button again will turn them off
 | Second Button | Long Press | Turn off any lights that are currently on |
 | Third Button | First Short  Press | All 3 lights are turned on to low intensity warm white |
-| Third Button | Second Short Press | if lights are still on and in the low intensty warm white state pressing the button again will turn them off
+| Third Button | Second Short Press | If lights are still on and in the low intensty warm white state pressing the button again will turn them off
 | Third Button | Long Press | Turn off any lights that are currently on |
 | All Three Buttons | Short Press | Terminate script - implemented for debuging using ssh |
