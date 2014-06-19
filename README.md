@@ -14,6 +14,10 @@ http://electriccampfire.info/2014/06/12/over-complicating-a-light-switch/
 each switch has a LED to illuminate it, these LEDs are used to locate the lightswitch in the dark and to indicate the programs status.
 
 ALL LEDS OFF - script failed to start or exited safely
+
 FIRST LED ON - script started, defined global varibles, and output pins
+
 SECOND LED ON - connection to hue bridge has been established
+
 THIRD LED ON - the script made it to the main loop (but the main loop is not necessarily running still)
+
