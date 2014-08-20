@@ -42,3 +42,4 @@ each switch has a LED to illuminate it, these LEDs are used to locate the lights
 ###Notes
 
 1. Make sure to change the bridge ip address to reflect that of the one on your network.
+2. Also remember to hit the sync button on the Bridge the first time the script runs to authenticate it.
