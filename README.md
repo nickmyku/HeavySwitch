@@ -38,3 +38,7 @@ each switch has a LED to illuminate it, these LEDs are used to locate the lights
 | Third Button | Second Short Press | If lights are still on and in the low intensty warm white state pressing the button again will turn them off
 | Third Button | Long Press | Turn off any lights that are currently on |
 | All Three Buttons | Short Press | Terminate script - implemented for debuging using ssh |
+
+###Notes
+
+1. Make sure to change the bridge ip address to reflect that of the one on your network.
