@@ -54,7 +54,7 @@ GPIO.setup(COLOR_LED, GPIO.OUT)
 #set all first LED to on - indicates script ran
 GPIO.output(ON_LED, True)
 
-b = Bridge('192.168.1.11')
+b = Bridge('192.168.1.202')
 lights = b.get_light_objects('id')
 
 #set second LED to on - indicates bridge connection was set up
