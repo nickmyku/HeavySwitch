@@ -39,6 +39,25 @@ each switch has a LED to illuminate it, these LEDs are used to locate the lights
 | Third Button | Long Press | Turn off any lights that are currently on |
 | All Three Buttons | Short Press | Terminate script - implemented for debuging using ssh |
 
+###Keyboard Functions
+
+Keyboard key functionality was added to control the lights remotely using a bluetooth keyboard
+
+|  KEY  |   INTERACTION   | RESULT |
+| :------: | :-------------: | :----- |
+| 'Q' | First Press | All 3 lights are turned on to full intensity cool white |
+| 'Q' | Second Press | All 3 lights are turned off |
+| 'A' | First Press | All 3 lights are turned on to a medium intensity pink or cyan |
+| 'A' | Second Press | All 3 lights are turned off |
+| 'Z' | First Press | All 3 lights are turned on to low intensity warm white |
+| 'Z' | Second Press | All 3 lights are turned off |
+| SPACEBAR | Any Press | Terminate script - implemented for debuging using ssh |
+
+###Other
+
+By utilizing the pygame library now any screen connected to the pi will show the state of the lights, and plain text messages are sent through any ssh connection
+
+
 ###Notes
 
 1. Make sure to change the bridge ip address to reflect that of the one on your network.
