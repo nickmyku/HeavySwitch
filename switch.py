@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import os
+import pygame
+from pygame.locals import *
 import time
 import sys
 import RPi.GPIO as GPIO
@@ -43,6 +46,7 @@ dim_Hue = 10000		#hue value, from 0 to 65280
 dim_Sat = 100		#saturation value, from 0 to 255, higher the more colorful
 dim_Bri = 1		#brightness value, from 0 to 255, higher is brighter
 
+GPIO.setwarnings(False)		#silence pin in use warning
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(ON_PIN, GPIO.IN)     #full om input pin
 GPIO.setup(COLOR_PIN, GPIO.IN)     #color on input pin
@@ -60,12 +64,23 @@ lights = b.get_light_objects('id')
 #set second LED to on - indicates bridge connection was set up
 GPIO.output(COLOR_LED, True)
 
+#intialize pygame
+pygame.init()
+screen = pygame.display.set_mode((640,480))	#need to set display to catch key presses
+pygame.display.set_caption('HeavySwitch')
+pygame.mouse.set_visible(0)
+
 def setLight(light_num, on_val, hue_val, sat_val, bright_val):
-    lights[light_num].on = on_val
-    lights[light_num].hue = hue_val
-    lights[light_num].saturation = sat_val
-    lights[light_num].brightness = bright_val
-    return;
+	lights[light_num].on = on_val	#light must be on to change paramters
+	if on_val == True:
+		sleep(.1)
+		lights[light_num].brightness = bright_val
+		sleep(.1)
+		lights[light_num].hue = hue_val
+		sleep(.1)
+		lights[light_num].saturation = sat_val
+		sleep(.1)
+	return;
 
 
 def allOff():
@@ -79,6 +94,7 @@ def allOff():
     on_state = False
     color_state = False
     dim_state = False
+    setStateLabel('The lights are OFF')
     return;
 
 def setAll(on_val, hue_val, sat_val, bright_val):
@@ -121,19 +137,114 @@ def buttonHeld(pin):
 
 print("\npress Ctrl+C or press all buttons to terminate script")
 
-#set third LED to on - indicates main loop was reached
+def setLightsON():
+	global on_state
+	global color_state
+	global dim_state
+	setAll(True, on_Hue, on_Sat, on_Bri)
+	on_state = True
+	color_state = False
+	dim_state = False
+	setStateLabel('The lights are set to ON')
+	return;
+
+def setLightsCOLOR():
+	global on_state
+	global color_state
+	global dim_state
+	lights[1].on = False
+	#setLight(1, True, color_Hue_1, color_Sat_1, color_Bri_1)
+	setLight(2, True, color_Hue_2, color_Sat_2, color_Bri_2)
+	setLight(3, True, color_Hue_3, color_Sat_3, color_Bri_3)
+	on_state = False
+	color_state = True
+	dim_state = False
+	setStateLabel('The lights are set to COLOR')
+	return;
+
+def setLightsDIM():
+	global on_state
+	global color_state
+	global dim_state
+	lights[1].on = False
+	#setLight(1, True, dim_Hue, dim_Sat, dim_Bri)
+	setLight(2, True, dim_Hue, dim_Sat, dim_Bri)
+	lights[3].on = False
+	#setLight(3, True, dim_Hue, dim_Sat, dim_Bri)
+	on_state = False
+	color_state = False
+	dim_state = True
+	setStateLabel('The lights are set to DIM')
+	return;
+
+def setStateLabel(text_str):
+	screen.fill(pygame.Color("black"))	#erase screen
+	font = pygame.font.Font(None, 25)	#set font parameters
+	label_text = font.render(str(text_str), True, (255,255,255))	#assign text, make visible, make color white
+	screen.blit(label_text, (0,10))		#set label position
+	pygame.display.update()			#update the screen
+	print text_str
+	return;
+
+#code to check if lights were in not-off state when program started
+#b.get_light(1, 'hue')
+if(lights[2].hue == on_Hue):
+	on_state = True
+	color_state = False
+	dim_state = False
+	state_text = 'The lights are set to ON'
+elif(lights[2].hue == color_Hue_2):
+	on_state = False
+	color_state = True
+	dim_state = False
+	state_text = 'The lights are set to COLOR'
+elif(lights[2].hue == dim_Hue):
+	on_state = False
+	color_state = False
+	dim_state = True
+	state_text = 'The lights are set to DIM'
+else:
+	state_text = 'The lights are OFF'
+
+setStateLabel(state_text)
+
+#the third LED is on - indicates the main loop was reached
 GPIO.output(DIM_LED, True)
 
 while True:
     try:
+	#key press handler using pygame events
+	for event in pygame.event.get():
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_SPACE:
+				allOff()
+			#q key turns on full brightness
+			if event.key == pygame.K_q:
+				if(on_state == False):
+					setLightsON()
+				else:
+					allOff()
+			#a key turns lights on color mode
+			if event.key == pygame.K_a:
+				if(color_state == False):
+					setLightsCOLOR()
+				else:
+					allOff()
+			#z key turn lights on in dim mode
+			if event.key == pygame.K_z:
+				if(dim_state == False):
+					setLightsDIM()
+				else:
+					allOff()
         #if "ON" button pressed but not held and no other buttons were pressed - then set lights to "ON" profile
 	if(GPIO.input(ON_PIN) == False and buttonHeld(ON_PIN) == False and GPIO.input(COLOR_PIN) == True and GPIO.input(DIM_PIN) == True):
            #if this light combo is not already on then turn it on
            if(on_state == False):       
-               setAll(True, on_Hue, on_Sat, on_Bri)
-	       on_state = True
-	       color_state = False
-               dim_state = False
+		setLightsON()
+		#setAll(True, on_Hue, on_Sat, on_Bri)
+	        #on_state = True
+	        #color_state = False
+                #dim_state = False
            #otherwise turn everything off
            else:
                allOff()
@@ -141,12 +252,13 @@ while True:
         if(GPIO.input(COLOR_PIN) == False and buttonHeld(COLOR_PIN) == False and GPIO.input(ON_PIN) == True and GPIO.input(DIM_PIN) == True):
            #if this light combo is not already on then turn it on
            if(color_state == False):
-               setLight(1,True, color_Hue_1, color_Sat_1, color_Bri_1)
-	       setLight(2,True, color_Hue_2, color_Sat_2, color_Bri_2)
-	       setLight(3,True, color_Hue_3, color_Sat_3, color_Bri_3)
-               on_state = False
-               color_state = True
-               dim_state = False
+		setLightsCOLOR()
+		#setLight(1,True, color_Hue_1, color_Sat_1, color_Bri_1)
+	        #setLight(2,True, color_Hue_2, color_Sat_2, color_Bri_2)
+	        #setLight(3,True, color_Hue_3, color_Sat_3, color_Bri_3)
+                #on_state = False
+                #color_state = True
+                #dim_state = False
            #otherwise turn everything off
            else:
                allOff()
@@ -154,10 +266,11 @@ while True:
         if(GPIO.input(DIM_PIN) == False and buttonHeld(DIM_PIN) == False and GPIO.input(ON_PIN) == True and GPIO.input(COLOR_PIN) == True):
             #if this light combo is not already on then turn it on
             if(dim_state == False):
-               setAll(True, dim_Hue, dim_Sat, dim_Bri)
-	       on_state = False
-               color_state = False
-               dim_state = True
+                setLightsDIM()
+		#setAll(True, dim_Hue, dim_Sat, dim_Bri)
+	        #on_state = False
+                #color_state = False
+                #dim_state = True
             #otherwise turn everything off
             else:
                allOff()
