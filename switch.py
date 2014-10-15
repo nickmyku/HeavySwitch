@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+#Written by Nicholas Mykulowycz
+#Created on May 25, 2014
+#script for reading button inputs and sending commands to lights
+
 import os
 import pygame
 from pygame.locals import *
