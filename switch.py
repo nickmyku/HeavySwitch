@@ -30,7 +30,7 @@ def constructWriteStr(array)
 	
 #function for writing to state file
 def writeStateFile(string)
-	with open('state', 'w') as f:
+	with open('log/state', 'w') as f:
 		f.write(string)
 	#then imediately close the file
 	f.closed
