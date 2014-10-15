@@ -20,9 +20,9 @@ hold_time = .6   #amount of time in seconds which must pass for a button to regi
 ON_PIN = 24
 COLOR_PIN = 23
 DIM_PIN = 25
-ON_LED = 27
-DIM_LED = 22
-COLOR_LED = 17
+#ON_LED = 27
+#DIM_LED = 22
+#COLOR_LED = 17
 
 #switch status booleans
 on_state = False
@@ -50,23 +50,24 @@ dim_Hue = 10000		#hue value, from 0 to 65280
 dim_Sat = 100		#saturation value, from 0 to 255, higher the more colorful
 dim_Bri = 1		#brightness value, from 0 to 255, higher is brighter
 
+#configure pins
 GPIO.setwarnings(False)		#silence pin in use warning
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(ON_PIN, GPIO.IN)     #full om input pin
 GPIO.setup(COLOR_PIN, GPIO.IN)     #color on input pin
 GPIO.setup(DIM_PIN, GPIO.IN)     #dim on input pin
-GPIO.setup(ON_LED, GPIO.OUT)
-GPIO.setup(DIM_LED, GPIO.OUT)
-GPIO.setup(COLOR_LED, GPIO.OUT)
+#GPIO.setup(ON_LED, GPIO.OUT)
+#GPIO.setup(DIM_LED, GPIO.OUT)
+#GPIO.setup(COLOR_LED, GPIO.OUT)
 
 #set all first LED to on - indicates script ran
-GPIO.output(ON_LED, True)
+#GPIO.output(ON_LED, True)
 
 b = Bridge('192.168.1.202')
 lights = b.get_light_objects('id')
 
 #set second LED to on - indicates bridge connection was set up
-GPIO.output(COLOR_LED, True)
+#GPIO.output(COLOR_LED, True)
 
 #intialize pygame
 pygame.init()
@@ -213,7 +214,7 @@ else:
 setStateLabel(state_text)
 
 #the third LED is on - indicates the main loop was reached
-GPIO.output(DIM_LED, True)
+#GPIO.output(DIM_LED, True)
 
 while True:
     try:
@@ -283,9 +284,10 @@ while True:
 	sleep(.1);
     except KeyboardInterrupt:
 	break
-    
-GPIO.output(ON_LED, False)
-GPIO.output(COLOR_LED, False)
-GPIO.output(DIM_LED, False)
+
+#shut off all LEDS before terminating    
+#GPIO.output(ON_LED, False)
+#GPIO.output(COLOR_LED, False)
+#GPIO.output(DIM_LED, False)
 
 
