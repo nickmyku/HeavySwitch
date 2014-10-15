@@ -14,6 +14,12 @@ ON_LED = 27
 DIM_LED = 22
 COLOR_LED = 17
 
+#configure pins
+GPIO.setwarnings(False)		#silence pin in use warning
+GPIO.setup(ON_LED, GPIO.OUT)
+GPIO.setup(DIM_LED, GPIO.OUT)
+GPIO.setup(COLOR_LED, GPIO.OUT)
+
 #set all first LED to on - indicates script ran
 GPIO.output(ON_LED, True)
 
