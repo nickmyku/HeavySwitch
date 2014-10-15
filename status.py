@@ -55,7 +55,7 @@ while running:
       GPIO.output(COLOR_LED, False)
 
     #check if main loop is acive
-    if(info[3] == 'loop active'):
+    if(info[3] == 'loop_active'):
       #the third LED is on - indicates the main loop was reached
       GPIO.output(DIM_LED, True)
     else:
