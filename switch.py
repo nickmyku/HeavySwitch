@@ -16,6 +16,25 @@ from subprocess import call
 
 hold_time = .6   #amount of time in seconds which must pass for a button to register a hold
 
+#initialize state data array
+state_data = ['0','script_terminated','bridge_disconnected','loop_terminated']
+#empty the write data string
+write_data = ''
+
+#formate array into string for writing to file
+def constructWriteStr(array)
+	string = ''
+	for i in range(0,len(array)):
+		string += str(array[i]) + '\n'
+	return string
+	
+#function for writing to state file
+def writeStateFile(string)
+	with open('state', 'w') as f:
+		f.write(string)
+	#then imediately close the file
+	f.closed
+
 #pin definitions
 ON_PIN = 24
 COLOR_PIN = 23
@@ -60,14 +79,25 @@ GPIO.setup(DIM_PIN, GPIO.IN)     #dim on input pin
 #GPIO.setup(DIM_LED, GPIO.OUT)
 #GPIO.setup(COLOR_LED, GPIO.OUT)
 
-#set all first LED to on - indicates script ran
-#GPIO.output(ON_LED, True)
+#set script_started line in state file - indicates script ran
+state_data[0] = str(time())
+state_data[1] = 'script_started'
+#convert array to string
+write_data = constructWriteStr(state_data)
+#write to file
+writeStateFile(write_data)
 
 b = Bridge('192.168.1.202')
 lights = b.get_light_objects('id')
 
-#set second LED to on - indicates bridge connection was set up
-#GPIO.output(COLOR_LED, True)
+#set bridge_connected line in state file - indicates bridge connection was set up
+state_data[0] = str(time())
+state_data[2] = 'bridge_connected'
+write_data = constructWriteStr(state_data)
+#convert array to string
+write_data = constructWriteStr(state_data)
+#write to file
+writeStateFile(write_data)
 
 #intialize pygame
 pygame.init()
@@ -213,11 +243,17 @@ else:
 
 setStateLabel(state_text)
 
-#the third LED is on - indicates the main loop was reached
-#GPIO.output(DIM_LED, True)
 
 while True:
     try:
+  #set loop active line in state file - indicates main loop is running
+	state_data[0] = str(time())
+	state_data[3] = 'loop_active'
+	write_data = constructWriteStr(state_data)
+	#convert array to string
+	write_data = constructWriteStr(state_data)
+	#write to file
+	writeStateFile(write_data)
 	#key press handler using pygame events
 	for event in pygame.event.get():
 		if event.type == pygame.KEYDOWN:
