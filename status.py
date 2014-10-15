@@ -28,3 +28,9 @@ GPIO.output(COLOR_LED, True)
 
 #the third LED is on - indicates the main loop was reached
 GPIO.output(DIM_LED, True)
+
+
+#shut off all LEDS before terminating
+GPIO.output(ON_LED, False)
+GPIO.output(COLOR_LED, False)
+GPIO.output(DIM_LED, False)
