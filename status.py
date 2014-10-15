@@ -25,7 +25,7 @@ GPIO.setup(COLOR_LED, GPIO.OUT)
 
 while running:
   #open the state file and read the data
-  with open('state', 'r') as f:
+  with open('log/state', 'r') as f:
     read_data = f.read()
   #then imediately close the file
   f.closed
