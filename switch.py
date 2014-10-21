@@ -5,13 +5,13 @@
 #script for reading button inputs and sending commands to lights
 
 import os
+import sys
+import time
 import pygame
 from pygame.locals import *
-import time
-import sys
-import RPi.GPIO as GPIO
 from time import sleep
 from phue import Bridge
+import RPi.GPIO as GPIO
 from subprocess import call
 import pickle   #for saving/reading variables to/from file
 
