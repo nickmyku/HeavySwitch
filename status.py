@@ -20,6 +20,7 @@ COLOR_LED = 17
 
 #configure pins
 GPIO.setwarnings(False)		#silence pin in use warning
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(ON_LED, GPIO.OUT)
 GPIO.setup(DIM_LED, GPIO.OUT)
 GPIO.setup(COLOR_LED, GPIO.OUT)
