@@ -50,21 +50,21 @@ while running:
   if((curr_time-file_time) < MAX_TIME):
     
     #check if the script started
-    if(info[1] == 'script_started'):
+    if(state_array[1] == 'script_started'):
       #set all first LED to on - indicates script ran
       GPIO.output(ON_LED, True)
     else:
       GPIO.output(ON_LED, False)
       
     #check if bridge connection was established
-    if(info[2] == 'bridge_connected'):
+    if(state_array[2] == 'bridge_connected'):
       #set second LED to on - indicates bridge connection was set up
       GPIO.output(COLOR_LED, True)
     else:
       GPIO.output(COLOR_LED, False)
 
     #check if main loop is acive
-    if(info[3] == 'loop_active'):
+    if(state_array[3] == 'loop_active'):
       #the third LED is on - indicates the main loop was reached
       GPIO.output(DIM_LED, True)
     else:
