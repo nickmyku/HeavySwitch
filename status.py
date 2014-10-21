@@ -11,7 +11,7 @@ from time import sleep
 import pickle   #for saving/reading variables to/from file
 
 running = True
-MAX_TIME = 1
+MAX_TIME = 5
 
 #pin definitions
 ON_LED = 27
