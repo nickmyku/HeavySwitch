@@ -8,6 +8,7 @@ import os
 import sys
 from time import time
 from time import sleep
+import pickle   #for saving/reading variables to/from file
 
 running = True
 MAX_TIME = 1
@@ -25,15 +26,23 @@ GPIO.setup(COLOR_LED, GPIO.OUT)
 
 while running:
   #open the state file and read the data
-  with open('log/state', 'r') as f:
-    read_data = f.read()
+  #with open('log/state', 'r') as f:
+  #  read_data = f.read()
   #then imediately close the file
-  f.closed
+  #f.closed
   #split the text into array elements with whitespace delimiters
-  info = read_data.split()
+  #info = read_data.split()
   
   #convert time string into number
-  file_time = int(info[0])
+  #file_time = int(info[0])
+  
+  #open the pickled file
+  fileObj = open('log/state', 'r')
+  #de-pickle the file
+  state_array = pickle.load(fileObj)
+  #pull the timestamp the pickling occured
+  file_time = state_array[0]
+  
   #check current time
   curr_time = time()
 
