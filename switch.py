@@ -13,27 +13,27 @@ import RPi.GPIO as GPIO
 from time import sleep
 from phue import Bridge
 from subprocess import call
+import pickle   #for saving/reading variables to/from file
 
 hold_time = .6   #amount of time in seconds which must pass for a button to register a hold
 
 #initialize state data array
 state_data = ['0','script_terminated','bridge_disconnected','loop_terminated']
-#empty the write data string
-write_data = ''
+
 
 #formate array into string for writing to file
-def constructWriteStr(array)
-	string = ''
-	for i in range(0,len(array)):
-		string += str(array[i]) + '\n'
-	return string
+#def constructWriteStr(array)
+	#string = ''
+	#for i in range(0,len(array)):
+		#string += str(array[i]) + '\n'
+	#return string
 	
 #function for writing to state file
-def writeStateFile(string)
-	with open('log/state', 'w') as f:
-		f.write(string)
+def writeStateFile(array)
+	fileObj = open('log/state', 'wb')
+	pickle.dump(array)	
 	#then imediately close the file
-	f.closed
+	fileObj.close()
 
 #pin definitions
 ON_PIN = 24
@@ -82,10 +82,8 @@ GPIO.setup(DIM_PIN, GPIO.IN)     #dim on input pin
 #set script_started line in state file - indicates script ran
 state_data[0] = str(time())
 state_data[1] = 'script_started'
-#convert array to string
-write_data = constructWriteStr(state_data)
 #write to file
-writeStateFile(write_data)
+writeStateFile(state_data)
 
 b = Bridge('192.168.1.202')
 lights = b.get_light_objects('id')
@@ -93,11 +91,8 @@ lights = b.get_light_objects('id')
 #set bridge_connected line in state file - indicates bridge connection was set up
 state_data[0] = str(time())
 state_data[2] = 'bridge_connected'
-write_data = constructWriteStr(state_data)
-#convert array to string
-write_data = constructWriteStr(state_data)
 #write to file
-writeStateFile(write_data)
+writeStateFile(state_data)
 
 #intialize pygame
 pygame.init()
@@ -249,11 +244,8 @@ while True:
   #set loop active line in state file - indicates main loop is running
 	state_data[0] = str(time())
 	state_data[3] = 'loop_active'
-	write_data = constructWriteStr(state_data)
-	#convert array to string
-	write_data = constructWriteStr(state_data)
 	#write to file
-	writeStateFile(write_data)
+	writeStateFile(state_data)
 	#key press handler using pygame events
 	for event in pygame.event.get():
 		if event.type == pygame.KEYDOWN:
@@ -325,5 +317,13 @@ while True:
 #GPIO.output(ON_LED, False)
 #GPIO.output(COLOR_LED, False)
 #GPIO.output(DIM_LED, False)
+
+#initialize state data array
+state_data[0] = str(time())
+state_date[1] = 'script_terminated'
+state_data[2] = 'bridge_disconnected'
+state_data[3] = 'loop_terminated'
+#write to file
+writeStateFile(state_data)
 
 
