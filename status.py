@@ -55,9 +55,9 @@ print "Press CTRL+C to terminate script\n"
 while running:
   try:
     #make sure file exists before un pickling
-    if os.path.getsize('log/state') > 0:
+    if os.path.getsize('/home/pi/HeavySwitch/log/state') > 0:
     	#open the pickled file
-    	with open('log/state', 'r') as fileObj:
+    	with open('/home/pi/HeavySwitch/log/state', 'r') as fileObj:
     	  #de-pickle the file
     	  state_array = pickle.load(fileObj)
     #pull the timestamp the pickling occured

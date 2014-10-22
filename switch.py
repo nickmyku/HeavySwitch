@@ -30,7 +30,7 @@ state_data = ['0','script_terminated','bridge_disconnected','loop_terminated']
 	
 #function for writing to state file
 def writeStateFile(array):
-	fileObj = open('log/state', 'wb')
+	fileObj = open('/home/pi/HeavySwitch/log/state', 'wb')
 	pickle.dump(array,fileObj)	
 	#then imediately close the file
 	fileObj.close()
