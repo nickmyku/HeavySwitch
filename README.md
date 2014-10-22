@@ -15,6 +15,17 @@ A more complete write up/explaination can be found on my blog - [Electric Campfi
 
 each switch has a LED to illuminate it, these LEDs are used to locate the lightswitch in the dark and to indicate the program's status.
 
+###Script Structure
+
+The program has been broken into two parts. One part actually controls the lights and monitors the physical switches (switch.py). The other part monitors the switch application to make sure it is working (status.py) and sends a notification email if it detects a fault. The pickle module is used to 'communicate' between the two programs by serializing and deserializing an array varible that is structured in the following way:
+
+| Element # | Description | Possible Values |
+| :-------: | :---------: | :----: |
+| 0 | timestamp of last write | x.xx |
+| 1 | is the script running? | 'script_terminated', 'script_started' |
+| 2 | is the bridge connected? | 'bridge_disconnected', 'bridge_connected' |
+| 3 | is the switch.py main loop running? | 'loop_terminated', 'loop_running' |
+
 ###LED Status 
 
 | LED STATE | EXPLAINATION |
@@ -56,6 +67,8 @@ Keyboard key functionality was added to control the lights remotely using a blue
 ###Other
 
 By utilizing the pygame library now any screen connected to the pi will show the state of the lights, and plain text messages are sent through any ssh connection
+
+* pygame lib has been disabled until I can fix the start up issues with it
 
 
 ###Notes
