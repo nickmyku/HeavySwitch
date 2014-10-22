@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# this si the bash file that should be called from /etc/rc.local when the pi first starts
+# this is the bash file that should be called from /etc/rc.local when the pi first starts
 # it runs all scripts in the background to prevent the terminal from getting tied up
 # it also calls the start up notifier/emailer
 
 # always start status indicator script first, run in background
-sudo python status.py &
+sudo python /home/pi/HeavySwitch/scripts/status.py &
 # then start the actual switch control script, run in background
-sudo python switch.py &
+sudo python /home/pi/HeavySwitch/scripts/switch.py &
