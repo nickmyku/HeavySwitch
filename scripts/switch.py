@@ -15,60 +15,23 @@ import RPi.GPIO as GPIO
 from subprocess import call
 import pickle   #for saving/reading variables to/from file
 
-hold_time = .6   #amount of time in seconds which must pass for a button to register a hold
+#load shared global variables
+execfile('/home/pi/HeavySwitch/shared_globals.py')
 
 #initialize state data array
 state_data = ['0','script_terminated','bridge_disconnected','loop_terminated']
-STATE_PATH = '/home/pi/HeavySwitch/log/state'
 
-
-#formate array into string for writing to file
-#def constructWriteStr(array)
-	#string = ''
-	#for i in range(0,len(array)):
-		#string += str(array[i]) + '\n'
-	#return string
-	
-#function for writing to state file
+#write data to state file using pickle module
 def writeStateFile(array):
 	fileObj = open(STATE_PATH, 'wb')
 	pickle.dump(array,fileObj)	
 	#then imediately close the file
 	fileObj.close()
 
-#pin definitions
-ON_PIN = 24
-COLOR_PIN = 23
-DIM_PIN = 25
-#ON_LED = 27
-#DIM_LED = 22
-#COLOR_LED = 17
-
 #switch status booleans
 on_state = False
 color_state = False
 dim_state = False
-
-#on light parameters
-on_Hue = 35000		#hue value, from 0 to 65280
-on_Sat = 255		#saturation value, from 0 to 255, higher the more colorful
-on_Bri = 255		#brightness value, from 0 to 255, higher is brighter
-
-#color light parameters
-color_Hue_1 = 58000	#hue value, from 0 to 65280
-color_Sat_1 = 255	#saturation value, from 0 to 255, higher the more colorful
-color_Bri_1 = 127		#brightness value, from 0 to 255, higher is brighter
-color_Hue_2 = 47000	#hue value, from 0 to 65280
-color_Sat_2 = 255	#saturation value, from 0 to 255, higher the more colorful
-color_Bri_2 = 200	#brightness value, from 0 to 255, higher is brighter
-color_Hue_3 = 58000	#hue value, from 0 to 65280
-color_Sat_3 = 255	#saturation value, from 0 to 255, higher the more colorful
-color_Bri_3 = 127		#brightness value, from 0 to 255, higher is brighter
-
-#dim light parameters
-dim_Hue = 10000		#hue value, from 0 to 65280
-dim_Sat = 100		#saturation value, from 0 to 255, higher the more colorful
-dim_Bri = 1		#brightness value, from 0 to 255, higher is brighter
 
 #configure pins
 GPIO.setwarnings(False)		#silence pin in use warning
@@ -76,9 +39,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(ON_PIN, GPIO.IN)     #full om input pin
 GPIO.setup(COLOR_PIN, GPIO.IN)     #color on input pin
 GPIO.setup(DIM_PIN, GPIO.IN)     #dim on input pin
-#GPIO.setup(ON_LED, GPIO.OUT)
-#GPIO.setup(DIM_LED, GPIO.OUT)
-#GPIO.setup(COLOR_LED, GPIO.OUT)
+
 
 #set script_started line in state file - indicates script ran
 state_data[0] = str(time())
@@ -151,7 +112,7 @@ def buttonHeld(pin):
 
     #loop continues while time elapsed is less than the hold time threashold
     #and the button is still being held AND no other buttons are pressed
-    while((curr_time-start_time < hold_time) and GPIO.input(pin) == False and GPIO.input(alt_pin_1) == True and GPIO.input(alt_pin_2) == True):
+    while((curr_time-start_time < HOLD_TIME) and GPIO.input(pin) == False and GPIO.input(alt_pin_1) == True and GPIO.input(alt_pin_2) == True):
         sleep(0.05);
         curr_time = time()
 
