@@ -19,6 +19,7 @@ hold_time = .6   #amount of time in seconds which must pass for a button to regi
 
 #initialize state data array
 state_data = ['0','script_terminated','bridge_disconnected','loop_terminated']
+STATE_PATH = '/home/pi/HeavySwitch/log/state'
 
 
 #formate array into string for writing to file
@@ -30,7 +31,7 @@ state_data = ['0','script_terminated','bridge_disconnected','loop_terminated']
 	
 #function for writing to state file
 def writeStateFile(array):
-	fileObj = open('/home/pi/HeavySwitch/log/state', 'wb')
+	fileObj = open(STATE_PATH, 'wb')
 	pickle.dump(array,fileObj)	
 	#then imediately close the file
 	fileObj.close()
