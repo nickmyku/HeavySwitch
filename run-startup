@@ -4,6 +4,8 @@
 # it runs all scripts in the background to prevent the terminal from getting tied up
 # it also calls the start up notifier/emailer
 
+# launch power on email notifier
+sudo python /home/pi/HeavySwitch/scripts/startup_email.py
 # always start status indicator script first, run in background
 sudo python /home/pi/HeavySwitch/scripts/status.py &
 # then start the actual switch control script, run in background
