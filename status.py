@@ -33,6 +33,8 @@ while running:
     fileObj = open('log/state', 'r')
     #de-pickle the file
     state_array = pickle.load(fileObj)
+    #close the file
+    fileObj.close()
     #pull the timestamp the pickling occured
     file_time = state_array[0]
   
