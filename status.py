@@ -35,6 +35,7 @@ looping = False
 
 error_count = 0
 last_email_sent = 0
+state_array =['0', 'script_terminated', 'bridge_disconnected', 'loop_terminated']
 
 #pin definitions
 ON_LED = 27
@@ -53,12 +54,12 @@ print "Press CTRL+C to terminate script\n"
 
 while running:
   try:
-    #open the pickled file
-    fileObj = open('log/state', 'r')
-    #de-pickle the file
-    state_array = pickle.load(fileObj)
-    #close the file
-    fileObj.close()
+    #make sure file exists before un pickling
+    if os.path.getsize('log/state') > 0:
+    	#open the pickled file
+    	with open('log/state', 'r') as fileObj:
+    	  #de-pickle the file
+    	  state_array = pickle.load(fileObj)
     #pull the timestamp the pickling occured
     file_time = float(state_array[0])
   
