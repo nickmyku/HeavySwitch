@@ -14,37 +14,36 @@ from subprocess import call
 import pickle   #for saving/reading variables to/from file
 import smtplib	#for email notifications
 
-running = True
-MAX_TIME = float(3) # 3 seconds is the max time a file write is considered valid
-GMAIL_USER = 'bot4756@gmail.com'
-GMAIL_PASS = 'thesewords1'
-recipient = 'nanosecrepair@gmail.com'
+#load shared global variables
+execfile('/home/pi/HeavySwitch/shared_globals.py')
+
+# subject of email
 subject = 'HeavySwitch has taken its own life'
-mail_host = 'smtp.gmail.com:587'
-#header for email
+# header for email
 headers = "\r\n".join(["from: " + GMAIL_USER,
                        "subject: " + subject,
                        "to: " + recipient,
                        "mime-version: 1.0",
                        "content-type: text/html"])
 
-#booleans
+# controls the main loop
+running = True
+
+# status booleans
 started = False
 connected = False
 looping = False
 
+# number of errors which occured consecutively 
 error_count = 0
+# timestamp of when the last email was sent
 last_email_sent = 0
+# structure which hold the status of switch.py script
 state_array =['0', 'script_terminated', 'bridge_disconnected', 'loop_terminated']
-
-#pin definitions
-ON_LED = 27
-DIM_LED = 22
-COLOR_LED = 17
 
 #configure pins
 GPIO.setwarnings(False)		#silence pin in use warning
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)		#set pin numbering mode
 GPIO.setup(ON_LED, GPIO.OUT)
 GPIO.setup(DIM_LED, GPIO.OUT)
 GPIO.setup(COLOR_LED, GPIO.OUT)
@@ -55,9 +54,9 @@ print "Press CTRL+C to terminate script\n"
 while running:
   try:
     #make sure file exists before un pickling
-    if os.path.getsize('/home/pi/HeavySwitch/log/state') > 0:
+    if os.path.getsize(STATE_PATH) > 0:
     	#open the pickled file
-    	with open('/home/pi/HeavySwitch/log/state', 'r') as fileObj:
+    	with open(STATE_PATH, 'r') as fileObj:
     	  #de-pickle the file
     	  state_array = pickle.load(fileObj)
     #pull the timestamp the pickling occured
@@ -115,7 +114,7 @@ while running:
       error_count += 1
 
     #if more than 120 errors have occured then send an email
-    if(error_count > 120):
+    if(error_count > MAX_ERRORS):
       #check that an email has not been sent in over a day before sending another
       if(curr_time > (last_email_sent+86400)):
         body_of_email  = "We regret to inform you that your HeavySwitch encountered some sort of error and decided the best course of action would be to end its life*"
