@@ -17,7 +17,9 @@ each switch has a LED to illuminate it, these LEDs are used to locate the lights
 
 ###Script Structure
 
-The program has been broken into two parts. One part actually controls the lights and monitors the physical switches (switch.py). The other part monitors the switch application to make sure it is working (status.py) and sends a notification email if it detects a fault. The pickle module is used to 'communicate' between the two programs by serializing and deserializing an array varible that is structured in the following way:
+The program has been broken into two parts. One part actually controls the lights and monitors the physical switches (_switch.py_). The other part monitors the switch application to make sure it is working (_status.py_) and sends a notification email if it detects a fault. 
+
+The pickle module is used to 'communicate' between the two programs by serializing and deserializing an array which is stored at _log/state_ varible that is structured in the following way:
 
 | Element # | Description | Possible Values |
 | :-------: | :---------: | :----: |
@@ -25,6 +27,16 @@ The program has been broken into two parts. One part actually controls the light
 | 1 | is the script running? | 'script_terminated', 'script_started' |
 | 2 | is the bridge connected? | 'bridge_disconnected', 'bridge_connected' |
 | 3 | is the switch.py main loop running? | 'loop_terminated', 'loop_running' |
+
+
+The _status.py_ script will increment the error counter by one if one of the following instances occur:
+
+* The difference between the current timestamp and the file timestamp is greater than 5 seconds
+* The _switch.py_ script has been terminated
+* The bridge was disconnected
+* the main loop in _switch.py_ is not running
+
+if the error count exceeds 120 an email will be sent alerting you that a persistent error has occured, the _status.py_ script will only send one email every 86400 seconds (1 day). Also if the error disappears before the count reaches 120, the error count will be reset to zero. The 120 number was choosen because the _status.py_ script only runs twice a second, assuming the runtime is short (it is) that means that the error has to persist for one minute before an alert email is sent
 
 ###LED Status 
 
@@ -54,6 +66,8 @@ The program has been broken into two parts. One part actually controls the light
 
 Keyboard key functionality was added to control the lights remotely using a bluetooth keyboard
 
+* currently broken
+
 |  KEY  |   INTERACTION   | RESULT |
 | :------: | :-------------: | :----- |
 | 'Q' | First Press | All 3 lights are turned on to full intensity cool white |
@@ -66,9 +80,9 @@ Keyboard key functionality was added to control the lights remotely using a blue
 
 ###Other
 
-By utilizing the pygame library now any screen connected to the pi will show the state of the lights, and plain text messages are sent through any ssh connection
+By utilizing the pygame module now any screen connected to the pi will show the state of the lights, and plain text messages are sent through any ssh connection
 
-* pygame lib has been disabled until I can fix the start up issues with it
+* pygame module has been disabled until I can fix the start up issues with it
 
 
 ###Notes
