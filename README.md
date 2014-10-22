@@ -66,7 +66,7 @@ if the error count exceeds 120 an email will be sent alerting you that a persist
 
 Keyboard key functionality was added to control the lights remotely using a bluetooth keyboard
 
-* currently broken
+NOTE: keyboard functionality currently broken
 
 |  KEY  |   INTERACTION   | RESULT |
 | :------: | :-------------: | :----- |
@@ -82,7 +82,7 @@ Keyboard key functionality was added to control the lights remotely using a blue
 
 By utilizing the pygame module now any screen connected to the pi will show the state of the lights, and plain text messages are sent through any ssh connection
 
-* pygame module has been disabled until I can fix the start up issues with it
+NOTE: pygame module has been disabled until I can fix the start up issues with it
 
 
 ###Notes
