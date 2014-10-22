@@ -1,8 +1,18 @@
 # set path for state file
 STATE_PATH = '/home/pi/HeavySwitch/log/state'
+# amount of time button needs to be held for it to be considered a 'long' press
+HOLD_TIME = .6
+# 5 seconds is the max time a file write is considered valid
+MAX_TIME = 5 #float(5)
+# number of consecutive errors which must occure before error email is sent
+MAX_ERRORS = 120 # 120 is approx one minute delay
 
 
 # email credientials
+GMAIL_USER = 'bot4756@gmail.com'
+GMAIL_PASS = 'thesewords1'
+recipient = 'nanosecrepair@gmail.com'
+mail_host = 'smtp.gmail.com:587'
 
 
 # input pin definitions
