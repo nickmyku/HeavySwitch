@@ -125,6 +125,8 @@ while running:
         body_of_email += "\nAttribute 2: %s" % state_array[2]
         body_of_email += "\nAttribute 3: %s" % state_array[3]
         body_of_email += "\nNumber of Errors: %d" % error_count
+        body_of_email += "\n\nSorry for your loss,"
+	body_of_email += "\n-Bot4756"
         print '\n' + body_of_email
         #replace new lines with br elements to properly format for gmail
         body_of_email = body_of_email.replace('\n', '<br />')
