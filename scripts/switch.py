@@ -16,7 +16,7 @@ from subprocess import call
 import pickle   #for saving/reading variables to/from file
 
 #load shared global variables
-execfile('/home/pi/HeavySwitch/shared_globals.py')
+execfile('/home/pi/HeavySwitch/scripts/shared_globals.py')
 
 #initialize state data array
 state_data = ['0','script_terminated','bridge_disconnected','loop_terminated']
