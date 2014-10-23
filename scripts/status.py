@@ -15,7 +15,7 @@ import pickle   #for saving/reading variables to/from file
 import smtplib	#for email notifications
 
 #load shared global variables
-execfile('/home/pi/HeavySwitch/shared_globals.py')
+execfile('/home/pi/HeavySwitch/scripts/shared_globals.py')
 
 # subject of email
 subject = 'HeavySwitch has taken its own life'
