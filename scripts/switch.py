@@ -6,14 +6,15 @@
 
 import os
 import sys
-import pygame
-from pygame.locals import *
+#import pygame
+#from pygame.locals import *
 from time import sleep
 from time import time
 from phue import Bridge
 import RPi.GPIO as GPIO
 from subprocess import call
 import pickle   #for saving/reading variables to/from file
+import threading #for handling key press events with out tying up the script
 
 #load shared global variables
 execfile('/home/pi/HeavySwitch/scripts/shared_globals.py')
