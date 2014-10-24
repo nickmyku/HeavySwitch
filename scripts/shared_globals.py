@@ -8,6 +8,9 @@ MAX_TIME = 5 #float(5)
 MAX_ERRORS = 120 # 120 is approx one minute delay
 
 
+# IP Address of the hue bridge
+BRIDGE_IP = '192.168.1.202'
+
 # email credientials
 GMAIL_USER = 'bot4756@gmail.com'
 GMAIL_PASS = 'thesewords1'

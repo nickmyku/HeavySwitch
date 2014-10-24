@@ -8,13 +8,14 @@ import os
 import sys
 #import pygame
 #from pygame.locals import *
+import curses
 from time import sleep
 from time import time
 from phue import Bridge
 import RPi.GPIO as GPIO
 from subprocess import call
 import pickle   #for saving/reading variables to/from file
-import threading #for handling key press events with out tying up the script
+#import threading #for handling key press events with out tying up the script
 
 #load shared global variables
 execfile('/home/pi/HeavySwitch/scripts/shared_globals.py')
@@ -29,10 +30,24 @@ def writeStateFile(array):
 	#then imediately close the file
 	fileObj.close()
 
+def updateScreen():
+	global light_str
+	global state_data
+	time_string = ctime(time())
+	# print current light state
+	term.addstr(1,1, ("The lights were set to %s as of %s" % (light_str,time_string)))
+	# print data from state array
+	term.addstr(3,1, ("Timestamp: %s" % state_data[0]))
+	term.addstr(4,1, ("1: %s" % state_data[1]))
+	term.addstr(5,1, ("2: %s" % state_data[2]))
+	term.addstr(6,1, ("3: %s" % state_data[3]))
+	return;
+
 #switch status booleans
 on_state = False
 color_state = False
 dim_state = False
+light_str = "OFF"
 
 #configure pins
 GPIO.setwarnings(False)		#silence pin in use warning
@@ -48,7 +63,13 @@ state_data[1] = 'script_started'
 #write to file
 writeStateFile(state_data)
 
-b = Bridge('192.168.1.202')
+#initialize curses
+term = curses.initscr()
+curses.cbreak()	#turns off line buffering
+curses.noecho() #turns of echo in terminal
+term.nodelay(True)	#makes curse getch non blocking
+
+b = Bridge(BRIDGE_IP)
 lights = b.get_light_objects('id')
 
 #set bridge_connected line in state file - indicates bridge connection was set up
@@ -56,6 +77,7 @@ state_data[0] = str(time())
 state_data[2] = 'bridge_connected'
 #write to file
 writeStateFile(state_data)
+updateScreen()
 
 #intialize pygame
 #pygame.init()
@@ -81,13 +103,15 @@ def allOff():
     global on_state
     global color_state
     global dim_state
+    global light_str
     lights[1].on = False
     lights[2].on = False
     lights[3].on = False
     on_state = False
     color_state = False
     dim_state = False
-    setStateLabel('The lights are OFF')
+    light_str = "OFF"
+    updateScreen()
     return;
 
 def setAll(on_val, hue_val, sat_val, bright_val):
@@ -134,17 +158,20 @@ def setLightsON():
 	global on_state
 	global color_state
 	global dim_state
+	global light_str
 	setAll(True, on_Hue, on_Sat, on_Bri)
 	on_state = True
 	color_state = False
 	dim_state = False
-	setStateLabel('The lights are set to ON')
+	light_str = "ON"
+	updateScreen()
 	return;
 
 def setLightsCOLOR():
 	global on_state
 	global color_state
 	global dim_state
+	global light_str
 	lights[1].on = False
 	#setLight(1, True, color_Hue_1, color_Sat_1, color_Bri_1)
 	setLight(2, True, color_Hue_2, color_Sat_2, color_Bri_2)
@@ -152,13 +179,15 @@ def setLightsCOLOR():
 	on_state = False
 	color_state = True
 	dim_state = False
-	setStateLabel('The lights are set to COLOR')
+	light_str = "COLOR"
+	updateScreen()
 	return;
 
 def setLightsDIM():
 	global on_state
 	global color_state
 	global dim_state
+	global light_str
 	lights[1].on = False
 	#setLight(1, True, dim_Hue, dim_Sat, dim_Bri)
 	setLight(2, True, dim_Hue, dim_Sat, dim_Bri)
@@ -167,17 +196,11 @@ def setLightsDIM():
 	on_state = False
 	color_state = False
 	dim_state = True
-	setStateLabel('The lights are set to DIM')
+	light_str = "DIM"
+	updateScreen()
 	return;
 
-def setStateLabel(text_str):
-	#screen.fill(pygame.Color("black"))	#erase screen
-	#font = pygame.font.Font(None, 25)	#set font parameters
-	#label_text = font.render(str(text_str), True, (255,255,255))	#assign text, make visible, make color white
-	#screen.blit(label_text, (0,10))		#set label position
-	#pygame.display.update()			#update the screen
-	print text_str
-	return;
+
 
 #code to check if lights were in not-off state when program started
 #b.get_light(1, 'hue')
@@ -185,21 +208,21 @@ if(lights[2].hue == on_Hue):
 	on_state = True
 	color_state = False
 	dim_state = False
-	state_text = 'The lights are set to ON'
+	light_str = 'ON'
 elif(lights[2].hue == color_Hue_2):
 	on_state = False
 	color_state = True
 	dim_state = False
-	state_text = 'The lights are set to COLOR'
+	light_str = 'COLOR'
 elif(lights[2].hue == dim_Hue):
 	on_state = False
 	color_state = False
 	dim_state = True
-	state_text = 'The lights are set to DIM'
+	light_str = 'DIM'
+elif(lighs[1].on == False and lights[2].on == False and lights[3].on == False):
+	light_str = 'OFF'
 else:
-	state_text = 'The lights are OFF'
-
-setStateLabel(state_text)
+	light_str = 'UNKNOWN'
 
 
 while True:
@@ -209,30 +232,34 @@ while True:
 	state_data[3] = 'loop_active'
 	#write to file
 	writeStateFile(state_data)
-	#key press handler using pygame events
-	#for event in pygame.event.get():
-		#if event.type == pygame.KEYDOWN:
-			#if event.key == pygame.K_SPACE:
-				#allOff()
-			#q key turns on full brightness
-			#if event.key == pygame.K_q:
-				#if(on_state == False):
-					#setLightsON()
-				#else:
-					#allOff()
-			#a key turns lights on color mode
-			#if event.key == pygame.K_a:
-				#if(color_state == False):
-					#setLightsCOLOR()
-				#else:
-					#allOff()
-			#z key turn lights on in dim mode
-			#if event.key == pygame.K_z:
-				#if(dim_state == False):
-					#setLightsDIM()
-				#else:
-					#allOff()
-        #if "ON" button pressed but not held and no other buttons were pressed - then set lights to "ON" profile
+	updateScreen()
+	#key press handler using curses
+	key = term.getch()
+	# key = -1 if there was no key detected
+	if(key != -1):
+		# if 'SPACE' key was pressed
+		if(str(key) == ' '):
+			allOff()
+		# if 'Q' key was presed - set to ON
+		elif(str(key) == 'q' or str(key) == 'Q'):
+			if(on_state == False):
+				setLightsON()
+			else:
+				allOff()
+		# if 'A' key was pressed - set to COLOR
+		elif(str(key) == 'a' or str(key) == 'A'):
+			if(color_state == False):
+				setLightsCOLOR()
+			else:
+				allOff()
+		# if 'Z' key was pressed - set to DIM
+		elif(str(key) == 'z' or str(key) == 'Z'):
+			if(dim_state == False):
+				setLightsDIM()
+			else:
+				allOff()
+
+    #if "ON" button pressed but not held and no other buttons were pressed - then set lights to "ON" profile
 	if(GPIO.input(ON_PIN) == False and buttonHeld(ON_PIN) == False and GPIO.input(COLOR_PIN) == True and GPIO.input(DIM_PIN) == True):
            #if this light combo is not already on then turn it on
            if(on_state == False):       
@@ -272,7 +299,7 @@ while True:
                allOff()
         if(GPIO.input(ON_PIN) == False and GPIO.input(COLOR_PIN) == False and GPIO.input(DIM_PIN) == False):
 		break
-	sleep(.1);
+	sleep(.05);
     except KeyboardInterrupt:
 	break
 
@@ -288,6 +315,9 @@ state_data[2] = 'bridge_disconnected'
 state_data[3] = 'loop_terminated'
 #write to file
 writeStateFile(state_data)
+
+# turn back on echo
+curses.echo()
 
 print "switch.py terminated..."
 

@@ -8,5 +8,6 @@
 sudo python /home/pi/HeavySwitch/scripts/startup_email.py
 # always start status indicator script first, run in background
 sudo python /home/pi/HeavySwitch/scripts/status.py &
-# then start the actual switch control script, run in background
-sudo python /home/pi/HeavySwitch/scripts/switch.py &
+# then start the actual switch control script
+# cant run in background because of curses?
+sudo python /home/pi/HeavySwitch/scripts/switch.py
