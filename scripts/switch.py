@@ -11,6 +11,7 @@ import sys
 import curses
 from time import sleep
 from time import time
+from time import ctime
 from phue import Bridge
 import RPi.GPIO as GPIO
 from subprocess import call
@@ -48,6 +49,7 @@ on_state = False
 color_state = False
 dim_state = False
 light_str = "OFF"
+last_key_time = 0
 
 #configure pins
 GPIO.setwarnings(False)		#silence pin in use warning
@@ -236,24 +238,31 @@ while True:
 	#key press handler using curses
 	key = term.getch()
 	# key = -1 if there was no key detected
-	if(key != -1):
+	#term.clear()
+	#term.addstr(8,1, ('your key was: %d' % key))
+	if(key != -1 and (time() > last_key_time + 1.5)):
+		last_key_time = time()
 		# if 'SPACE' key was pressed
-		if(str(key) == ' '):
+		# 32 is ascii for SPACE
+		if(key == 32):
 			allOff()
 		# if 'Q' key was presed - set to ON
-		elif(str(key) == 'q' or str(key) == 'Q'):
+		# 113 is ascii for q and 81 is ascii for Q
+		elif(key == 113 or key == 81):
 			if(on_state == False):
 				setLightsON()
 			else:
 				allOff()
 		# if 'A' key was pressed - set to COLOR
-		elif(str(key) == 'a' or str(key) == 'A'):
+		# 97 is ascii for a and 65 is asci for A
+		elif(key == 97  or key == 65):
 			if(color_state == False):
 				setLightsCOLOR()
 			else:
 				allOff()
 		# if 'Z' key was pressed - set to DIM
-		elif(str(key) == 'z' or str(key) == 'Z'):
+		# 122 is ascii for z and 90 is ascii for Z
+		elif(key == 122 or key == 90):
 			if(dim_state == False):
 				setLightsDIM()
 			else:
@@ -316,8 +325,13 @@ state_data[3] = 'loop_terminated'
 #write to file
 writeStateFile(state_data)
 
+# turn buffering back on
+curses.nocbreak()
 # turn back on echo
 curses.echo()
+#
+cures.endwin()
+
 
 print "switch.py terminated..."
 
