@@ -89,3 +89,4 @@ NOTE: pygame module has been disabled until I can fix the start up issues with i
 
 1. Make sure to change the bridge ip address to reflect that of the one on your network.
 2. Also remember to hit the sync button on the Bridge the first time the script runs to authenticate it.
+3. if scripts breaks while in curses mode, type "stty echo" and "stty sane" to fix formating
