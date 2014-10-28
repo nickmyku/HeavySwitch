@@ -330,7 +330,7 @@ curses.nocbreak()
 # turn back on echo
 curses.echo()
 #
-cures.endwin()
+curses.endwin()
 
 
 print "switch.py terminated..."
