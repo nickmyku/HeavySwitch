@@ -221,7 +221,7 @@ elif(lights[2].hue == dim_Hue):
 	color_state = False
 	dim_state = True
 	light_str = 'DIM'
-elif(lighs[1].on == False and lights[2].on == False and lights[3].on == False):
+elif(lights[1].on == False and lights[2].on == False and lights[3].on == False):
 	light_str = 'OFF'
 else:
 	light_str = 'UNKNOWN'

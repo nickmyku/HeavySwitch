@@ -108,9 +108,9 @@ while running:
   
     #if time value too old turn off all LEDs  
     else:
-      GPIO.output(ON_LED, False)
+      GPIO.output(ON_LED, True)
       GPIO.output(COLOR_LED, False)
-      GPIO.output(DIM_LED, False)
+      GPIO.output(DIM_LED, True)
       error_count += 1
 
     #if more than 120 errors have occured then send an email
