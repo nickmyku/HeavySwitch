@@ -84,6 +84,18 @@ By utilizing the pygame module now any screen connected to the pi will show the 
 
 NOTE: pygame module has been disabled until I can fix the start up issues with it
 
+###Installing on Blank Pi
+
+Install pip (python module manager)
+```
+sudo apt-get install python-pip
+```
+
+Install the phue module, used for communicating with hue bridge
+```
+pip install phue
+```
+
 
 ###Notes
 
