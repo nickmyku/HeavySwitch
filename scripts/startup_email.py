@@ -11,7 +11,8 @@ from time import ctime
 import smtplib	#for email notifications
 
 #load shared global variables
-execfile('/home/pi/HeavySwitch/scripts/shared_globals.py')
+#execfile('/home/pi/HeavySwitch/scripts/shared_globals.py')
+execfile('scripts/shared_globals.py')
 
 # subject of email
 subject = 'HeavySwitch has been reborn! rejoice!'
