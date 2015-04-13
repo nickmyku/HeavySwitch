@@ -1,6 +1,6 @@
 #!/bin/bash
 
 #always start status indicator script first, run in background
-sudo python /home/pi/HeavySwitch/scripts/status.py &
+sudo python /home/pi/heavyswitch/scripts/status.py &
 #then start the actual switch control script
-sudo python /home/pi/HeavySwitch/scripts/switch.py
+sudo python /home/pi/heavyswitch/scripts/switch.py
