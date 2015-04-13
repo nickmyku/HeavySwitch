@@ -19,7 +19,8 @@ import pickle   #for saving/reading variables to/from file
 #import threading #for handling key press events with out tying up the script
 
 #load shared global variables
-execfile('/home/pi/HeavySwitch/scripts/shared_globals.py')
+#execfile('/home/pi/heavyswitch/scripts/shared_globals.py')
+execfile('scripts/shared_globals.py')
 
 #initialize state data array
 state_data = ['0','script_terminated','bridge_disconnected','loop_terminated']

@@ -1,6 +1,10 @@
 #!/bin/bash
 
+#echo "dirname is - `dirname $0`"
+
 #always start status indicator script first, run in background
-sudo python /home/pi/heavyswitch/scripts/status.py &
+#sudo python /home/pi/heavyswitch/scripts/status.py &
+sudo python scripts/status.py &
 #then start the actual switch control script
-sudo python /home/pi/heavyswitch/scripts/switch.py
+#sudo python /home/pi/heavyswitch/scripts/switch.py
+sudo python scripts/switch.py

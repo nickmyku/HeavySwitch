@@ -1,5 +1,6 @@
 # set path for state file
-STATE_PATH = '/home/pi/HeavySwitch/log/state'
+#STATE_PATH = '/home/pi/HeavySwitch/log/state'
+STATE_PATH = 'log/state'
 # amount of time button needs to be held for it to be considered a 'long' press
 HOLD_TIME = .6
 # 5 seconds is the max time a file write is considered valid
