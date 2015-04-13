@@ -84,16 +84,16 @@ By utilizing the pygame module now any screen connected to the pi will show the 
 
 NOTE: pygame module has been disabled until I can fix the start up issues with it
 
-###Installing on Blank Pi
+###Installing on a Blank Pi
 
-Install pip (python module manager)
+If you have not already done so install pip (python module manager), it will make installing python modules much simplier
 ```
 sudo apt-get install python-pip
 ```
 
-Install the phue module, used for communicating with hue bridge
+Install the phue module, used for communicating with philips hue bulbs
 ```
-pip install phue
+sudo pip install phue
 ```
 
 
