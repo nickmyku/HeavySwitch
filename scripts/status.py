@@ -57,7 +57,7 @@ while running:
     #make sure file exists before un pickling
     if os.path.getsize(STATE_PATH) > 0:
     	#open the pickled file
-    	with open(STATE_PATH, 'r') as fileObj:
+    	with open(STATE_PATH, 'rb') as fileObj:
     	  #de-pickle the file
     	  state_array = pickle.load(fileObj)
     #pull the timestamp the pickling occured
